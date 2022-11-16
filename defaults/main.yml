@@ -2,6 +2,8 @@
 
 metabase_version: v0.41.5
 metabase_upgrade_cleanup: true
+metabase_host: "localhost"
+metabase_path: "/"
 
 metabase_user: metabase
 metabase_group: metabase
