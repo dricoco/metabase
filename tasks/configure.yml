@@ -8,7 +8,23 @@
   until: metabase_api_session is not failed
   retries: 10
   delay: 6
-
+  
+- name: check if metabase is already installed  
+  uri:
+    url: "http://{{ metabase_host }}:{{ metabase_port }}{{ metabase_path}}/api/session"
+    method: POST
+    body:
+      username: "{{ metabase_admin.email }}"
+      password: "{{ metabase_admin.password }}"
+    body_format: json
+    status_code: 200
+    headers:
+      Accept: "application/json"
+      Content-Type: "application/json"
+  register: metabase_api_login
+  when: metabase_api_login.json["id"]  
+  ignore_errors: true
+ 
 - name: submit initial configuration
   uri:
     url: "http://{{ metabase_host }}:{{ metabase_port }}{{ metabase_path}}/api/setup"
@@ -29,7 +45,7 @@
       Accept: "application/json"
       Content-Type: "application/json"
   register: metabase_api_setup
-  when: metabase_api_session.json["setup-token"]
+  when: metabase_api_session.json["setup-token"] and metabase_api_login is not defined
 
 - name: create initial databases
   include_tasks: add_database.yml
@@ -38,4 +54,4 @@
   loop: "{{ metabase_databases }}"
   loop_control:
     loop_var: database_item
-  when: metabase_api_session.json["setup-token"]
+  when: metabase_api_session.json["setup-token"] and metabase_api_login is not defined
