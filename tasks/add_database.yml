@@ -2,7 +2,7 @@
 
 - name: authenticate to api
   uri:
-    url: "http://localhost:{{ metabase_port }}/api/session"
+    url: "http://{{ metabase_host }}:{{ metabase_port }}{{ metabase_path }}api/session"
     method: POST
     body:
       username: "{{ metabase_admin.email }}"
@@ -17,7 +17,7 @@
 
 - name: add database # warning: this API endpoint is not idempotent!
   uri:
-    url: "http://localhost:{{ metabase_port }}/api/database"
+    url: "http://{{ metabase_host }}:{{ metabase_port }}{{ metabase_path }}api/database"
     method: POST
     body:
       name: "{{ database_item.name }}"
