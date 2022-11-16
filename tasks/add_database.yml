@@ -35,3 +35,4 @@
       Accept: "application/json"
       Content-Type: "application/json"
       Cookie: "metabase.SESSION={{ metabase_session.json.id }};"
+  when: metabase_api_login is not defined
