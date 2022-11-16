@@ -22,7 +22,7 @@
       Accept: "application/json"
       Content-Type: "application/json"
   register: metabase_api_login
-  when: metabase_api_login.json["id"]  
+  when: metabase_api_login.json["id"] is defined
   ignore_errors: true
  
 - name: submit initial configuration
