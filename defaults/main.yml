@@ -15,6 +15,7 @@ metabase_log_file: "{{ metabase_log_dir }}/metabase.log"
 metabase_working_directory: "/home/{{ metabase_user }}"
 
 metabase_host: localhost
+metabase_bind: 127.0.0.1
 metabase_path: ""
 metabase_port: 3000
 
