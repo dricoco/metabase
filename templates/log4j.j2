@@ -1,29 +1,29 @@
-log4j.rootLogger=WARN, file
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT" follow="true">
+      <PatternLayout pattern="%date %level %logger{2} :: %message%n%throwable">
+        <replace regex=":basic-auth \\[.*\\]" replacement=":basic-auth [redacted]"/>
+      </PatternLayout>
+    </Console>
 
-# log to a file
-log4j.appender.file=org.apache.log4j.RollingFileAppender
-log4j.appender.file.File={{ metabase_log_file }}
-log4j.appender.file.MaxFileSize=500MB
-log4j.appender.file.MaxBackupIndex=2
-log4j.appender.file.layout=org.apache.log4j.PatternLayout
-log4j.appender.file.layout.ConversionPattern=%d [%t] %-5p%c - %m%n
+    <RollingFile name="FILE" fileName="{{ metabase_log_file }}" filePattern="{{ metabase_log_file }}.%i">
+      <Policies>
+        <SizeBasedTriggeringPolicy size="500 MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="2"/>
+      <PatternLayout pattern="%d [%t] %-5p%c - %m%n">
+        <replace regex=":basic-auth \\[.*\\]" replacement=":basic-auth [redacted]"/>
+      </PatternLayout>
+    </RollingFile>
+  </Appenders>
 
-# customizations by package
+  <Loggers>
+    <Logger name="metabase" level="{{ metabase_log_level }}"/>
 
-log4j.logger.metabase.driver=INFO
-log4j.logger.metabase.plugins=INFO
-log4j.logger.metabase.middleware=INFO
-log4j.logger.metabase.models.permissions=INFO
-log4j.logger.metabase.query-processor.permissions=INFO
-log4j.logger.metabase.query-processor=INFO
-log4j.logger.metabase.sync=INFO
-log4j.logger.metabase.models.field-values=INFO
-
-log4j.logger.metabase.async.util=INFO
-log4j.logger.metabase.middleware.async=INFO
-log4j.logger.metabase.query-processor.async=INFO
-
-log4j.logger.metabase=INFO
-
-# c3p0 connection pools tend to log useless warnings way too often; only log actual errors
-log4j.logger.com.mchange=ERROR
+    <Root level="WARN">
+      <AppenderRef ref="STDOUT"/>
+      <AppenderRef ref="FILE"/>
+    </Root>
+  </Loggers>
+</Configuration>
